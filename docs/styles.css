@@ -1,0 +1,114 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    padding: 20px;
+}
+
+.deck-container {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    display: inline-block; /* Use inline-block for compactness */
+    width: auto; /* Allow the width to adjust to content */
+}
+
+.deck-header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.button-container {
+    margin: 10px 0;
+    display: flex; /* Use flexbox for layout */
+    flex-wrap: wrap; /* Allow buttons to wrap to the next line */
+    justify-content: center; /* Center the buttons */
+}
+
+.button-container button {
+    background-color: #ffffff;
+    border: 2px solid #333;
+    border-radius: 8px;
+    width: 60px; /* Fixed width for uniformity */
+    height: 60px; /* Fixed height for uniformity */
+    font-size: 20px;
+    margin: 5px;
+    cursor: pointer;
+    transition: transform 0.1s;
+    display: flex; /* Align content in the center */
+    justify-content: center; /* Center text horizontally */
+    align-items: center; /* Center text vertically */
+}
+
+/* Specific styles for the blank button */
+.draw-blank {
+    color: transparent; /* Make the text transparent */
+    background-color: #f9f9f9; /* Match the background to hide the text */
+}
+
+.button-container button:hover {
+    transform: scale(1.05);
+}
+
+.button-container button:active {
+    transform: scale(0.95);
+}
+
+.stats {
+    margin-top: 15px;
+    font-size: 16px;
+}
+
+hr {
+    margin: 10px 0;
+}
+
+.composition-header {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.composition-display {
+    font-size: 14px;
+    margin-top: 5px;
+    text-align: center; /* Center the text */
+    color: #555; /* Lighter color for distinction */
+}
+
+.total-cards {
+    font-size: 16px;
+    margin: 5px 0;
+    color: #333; /* Dark color for better visibility */
+}
+
+button.white {
+    background-color: white;
+    color: black;
+}
+
+button.yellow {
+    background-color: yellow;
+    color: black;
+}
+
+button.red {
+    background-color: red;
+    color: white;
+}
+
+button.black {
+    background-color: black;
+    color: white;
+}
+
+/* Additional button styles for consistency */
+button {
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
