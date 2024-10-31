@@ -27,7 +27,7 @@ function initializeDeck(deckName, instance) {
 
     const header = document.createElement("div");
     header.className = "deck-header";
-    header.textContent = `${deckName} Deck`;
+    header.textContent = `${deckName}`;
     deckDiv.appendChild(header);
 
     // Total cards remaining display
@@ -108,7 +108,7 @@ function updateStats(instance, deckName) {
         if (compositionDisplay) {
             const count = getCardCount(instance, deckName, card);
             const percentage = totalCards ? ((count / totalCards) * 100).toFixed(1) : 0;
-            compositionDisplay.innerHTML = `${count} <br>${percentage}%`;
+            compositionDisplay.innerHTML = `${count} / ${totalCards}<br>${percentage}%`;
         }
     });
 }
