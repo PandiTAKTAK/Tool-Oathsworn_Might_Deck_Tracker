@@ -1,87 +1,117 @@
+.header-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-container img {
+    width: 100px;
+    height: 100px;
+}
+
+.header-container span {
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;
-    padding: 20px;
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+        url('Chapter_10.webp');
+    background-size: cover;
+}
+
+h2 {
+    color: white;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 10px 0;
 }
 
 .deck-container {
-    border: 1px solid #ccc;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 5px;
     padding: 15px;
-    margin-bottom: 20px;
     background-color: #fff;
-    display: inline-block; /* Use inline-block for compactness */
-    width: auto; /* Allow the width to adjust to content */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.total-cards-corner {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
 }
 
 .deck-header {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 10px;
+    text-align: center;
 }
 
 .button-container {
-    margin: 10px 0;
-    display: flex; /* Use flexbox for layout */
-    flex-wrap: wrap; /* Allow buttons to wrap to the next line */
-    justify-content: center; /* Center the buttons */
+    display: grid;
+    grid-template-rows: repeat(1, auto);
+    grid-auto-flow: column;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
 }
 
 .button-container button {
     background-color: #ffffff;
     border: 2px solid #333;
     border-radius: 8px;
-    width: 60px; /* Fixed width for uniformity */
-    height: 60px; /* Fixed height for uniformity */
+    width: 60px;
+    height: 60px;
     font-size: 20px;
     margin: 5px;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     transition: transform 0.1s;
-    display: flex; /* Align content in the center */
-    justify-content: center; /* Center text horizontally */
-    align-items: center; /* Center text vertically */
-}
-
-/* Specific styles for the blank button */
-.draw-blank {
-    color: transparent; /* Make the text transparent */
-    background-color: #f9f9f9; /* Match the background to hide the text */
 }
 
 .button-container button:hover {
-    transform: scale(1.05);
-}
-
-.button-container button:active {
-    transform: scale(0.95);
-}
-
-.stats {
-    margin-top: 15px;
-    font-size: 16px;
-}
-
-hr {
-    margin: 10px 0;
-}
-
-.composition-header {
-    font-size: 20px;
-    font-weight: bold;
-    margin-top: 10px;
+    transform: scale(1.1);
+    background-color: rgba(200, 200, 200, 0.7);
 }
 
 .composition-display {
     font-size: 14px;
     margin-top: 5px;
-    text-align: center; /* Center the text */
-    color: #555; /* Lighter color for distinction */
+    text-align: center;
+    color: #555;
 }
 
-.total-cards {
-    font-size: 16px;
-    margin: 5px 0;
-    color: #333; /* Dark color for better visibility */
+#Oathsworn-decks, #Encounter-decks {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+@media (max-width: 768px) {
+    #Oathsworn-decks, #Encounter-decks {
+        flex-direction: column;
+    }
 }
 
 button.white {
@@ -104,11 +134,26 @@ button.black {
     color: white;
 }
 
-/* Additional button styles for consistency */
-button {
+.reset-button {
+    background-image: url('button_large.png');
+    background-size: 100% 100%;
+    background-position: center;
+    color: white;
+    font-weight: bold;
     border: none;
-    padding: 10px;
-    margin: 5px;
-    border-radius: 5px;
+    border-radius: 8px;
+    width: 80px;
+    height: 30px;
+    font-size: 12px;
+    margin-top: 5px;
     cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.reset-button:hover {
+    transform: scale(0.9);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }

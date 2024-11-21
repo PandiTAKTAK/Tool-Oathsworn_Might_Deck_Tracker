@@ -30,11 +30,10 @@ function initializeDeck(deckName, instance) {
     header.textContent = `${deckName}`;
     deckDiv.appendChild(header);
 
-    // Total cards remaining display
+    // Small label for total cards remaining in the corner
     const totalCardsDisplay = document.createElement("div");
-    totalCardsDisplay.className = "total-cards";
-    totalCardsDisplay.id = `${instance}-${deckName}-total`; // Unique ID for each deck
-    totalCardsDisplay.textContent = `Total Cards Remaining: ${allDecks[instance][deckName].length}`;
+    totalCardsDisplay.className = "total-cards-corner";
+    totalCardsDisplay.id = `${instance}-${deckName}-total-corner`;
     deckDiv.appendChild(totalCardsDisplay);
 
     // Button container for each card
@@ -66,7 +65,8 @@ function initializeDeck(deckName, instance) {
 
     // Reset button
     const resetButton = document.createElement("button");
-    resetButton.textContent = "Reset Deck";
+    resetButton.textContent = "Reset";
+    resetButton.classList.add("reset-button");
     resetButton.onclick = () => resetDeck(instance, deckName);
     deckDiv.appendChild(resetButton); // Add reset button below the buttons
 
@@ -74,6 +74,7 @@ function initializeDeck(deckName, instance) {
 
     updateStats(instance, deckName);
 }
+
 
 // Get the count of a specific card in the specified deck
 function getCardCount(instance, deckName, card) {
@@ -93,10 +94,10 @@ function drawCard(instance, deckName, card) {
 function updateStats(instance, deckName) {
     const totalCards = allDecks[instance][deckName].length; // Update total cards remaining here
 
-    // Update total cards remaining display for the specific deck
-    const totalCardsDisplay = document.getElementById(`${instance}-${deckName}-total`);
-    if (totalCardsDisplay) {
-        totalCardsDisplay.textContent = `Total Cards Remaining: ${totalCards} / 18`;
+    // Update the corner display with the new count
+    const totalCardsCornerDisplay = document.getElementById(`${instance}-${deckName}-total-corner`);
+    if (totalCardsCornerDisplay) {
+        totalCardsCornerDisplay.textContent = `${totalCards}`; // Update text in the corner
     }
 
     // Ensure all unique cards are accounted for in stats
@@ -108,7 +109,7 @@ function updateStats(instance, deckName) {
         if (compositionDisplay) {
             const count = getCardCount(instance, deckName, card);
             const percentage = totalCards ? ((count / totalCards) * 100).toFixed(1) : 0;
-            compositionDisplay.innerHTML = `${count} / ${totalCards}<br>${percentage}%`;
+            compositionDisplay.innerHTML = `${count}<br>${percentage}%`;
         }
     });
 }
@@ -118,6 +119,36 @@ function resetDeck(instance, deckName) {
     allDecks[instance][deckName] = initialDecks[deckName].concat(initialDecks[deckName], initialDecks[deckName]); // Reset to 18 cards
     updateStats(instance, deckName); // Update statistics for the specific deck
 }
+
+function adjustLayout() {
+    // Get the maximum number of buttons in any deck
+    const maxButtons = Math.max(...Object.keys(initialDecks).map(deck => initialDecks[deck].length));
+
+    // Get the available width for the container
+    const container = document.getElementById("Oathsworn-decks");
+    const containerWidth = container.offsetWidth;
+
+    // Calculate the maximum size for a single deck container
+    const maxDeckWidth = Math.floor(containerWidth / 4) - 20; // Account for gap
+    const buttonSize = Math.min(Math.floor((maxDeckWidth - 50) / maxButtons), 80); // Max button size
+
+    // Update the style of all buttons and containers
+    const allDecks = document.querySelectorAll('.deck-container');
+    const allButtons = document.querySelectorAll('.button-container button');
+
+    allDecks.forEach(deck => {
+        deck.style.width = `${maxDeckWidth}px`;
+    });
+
+    allButtons.forEach(button => {
+        button.style.width = `${buttonSize}px`;
+        button.style.height = `${buttonSize}px`;
+        button.style.fontSize = `${buttonSize / 3}px`;
+    });
+}
+
+// Run the layout adjustment on window resize
+window.addEventListener('resize', adjustLayout);
 
 // Initialize the deck tracker for both decks on page load
 window.onload = () => {
@@ -130,4 +161,7 @@ window.onload = () => {
     Object.keys(initialDecks).forEach(deckName => {
         initializeDeck(deckName, "Encounter");
     });
+
+    // Adjust layout after decks are initialized
+    adjustLayout();
 };
