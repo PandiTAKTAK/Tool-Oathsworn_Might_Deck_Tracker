@@ -92,12 +92,12 @@ function drawCard(instance, deckName, card) {
 
 // Update statistics for the specified deck
 function updateStats(instance, deckName) {
-    const totalCards = allDecks[instance][deckName].length; // Update total cards remaining here
+    const totalCards = allDecks[instance][deckName].length;
 
     // Update the corner display with the new count
     const totalCardsCornerDisplay = document.getElementById(`${instance}-${deckName}-total-corner`);
     if (totalCardsCornerDisplay) {
-        totalCardsCornerDisplay.textContent = `${totalCards}`; // Update text in the corner
+        totalCardsCornerDisplay.textContent = `${totalCards}`;
     }
 
     // Ensure all unique cards are accounted for in stats
@@ -112,6 +112,124 @@ function updateStats(instance, deckName) {
             compositionDisplay.innerHTML = `${count}<br>${percentage}%`;
         }
     });
+
+    // Calculate advanced stats (average result and hit chance)
+    const advancedStats = calculateAdvancedStats(allDecks[instance][deckName]);
+    displayAdvancedStats(instance, deckName, advancedStats);
+}
+
+// Calculate advanced statistics for a given deck
+function calculateAdvancedStats(deck) {
+    const results = { 1: {}, 2: {}, 3: {}, 4: {}, 5: {} };
+
+    [1, 2, 3, 4, 5].forEach(numCards => {
+        let totalScore = 0;
+        let hitCount = 0;
+        const trials = 10000; // Use Monte Carlo simulation for exploding cards
+
+        for (let i = 0; i < trials; i++) {
+            const hand = drawRandomHand(deck, numCards);
+            const { score, misses } = processHand(hand, deck);
+
+            if (misses < 2) hitCount++;
+            totalScore += score;
+        }
+
+        results[numCards] = {
+            average: (totalScore / trials).toFixed(2),
+            hitChance: ((hitCount / trials) * 100).toFixed(1) + "%"
+        };
+    });
+
+    return results;
+}
+
+// Draw a random hand of specified size from the deck
+function drawRandomHand(deck, numCards) {
+    const shuffledDeck = [...deck].sort(() => Math.random() - 0.5);
+    return shuffledDeck.slice(0, numCards);
+}
+
+// Process a hand of cards, including exploding cards
+function processHand(hand, fullDeck) {
+    let score = 0;
+    let misses = 0;
+
+    for (const card of hand) {
+        if (card === 0) {
+            misses++;
+        } else if (typeof card === "string" && card.includes("{")) {
+            // Exploding card logic
+            const value = parseInt(card.match(/\d+/)[0], 10);
+            score += value;
+
+            // Simulate drawing one extra card for the explosion
+            const extraCard = drawRandomCard(fullDeck);
+            if (extraCard !== null) {
+                const extraResult = processHand([extraCard], fullDeck);
+                score += extraResult.score;
+                misses += extraResult.misses;
+            }
+        } else {
+            score += card;
+        }
+    }
+
+    return { score, misses };
+}
+
+// Draw a single random card from the deck
+function drawRandomCard(deck) {
+    if (deck.length === 0) return null;
+    const randomIndex = Math.floor(Math.random() * deck.length);
+    return deck[randomIndex];
+}
+
+
+// Get all combinations of a specific number of cards from the deck
+function getCombinations(deck, numCards) {
+    if (deck.length < numCards) return [];
+    const combinations = [];
+
+    function helper(start, combo) {
+        if (combo.length === numCards) {
+            combinations.push(combo);
+            return;
+        }
+
+        for (let i = start; i < deck.length; i++) {
+            helper(i + 1, combo.concat(deck[i]));
+        }
+    }
+
+    helper(0, []);
+    return combinations;
+}
+
+// Display advanced statistics for a deck
+function displayAdvancedStats(instance, deckName, stats) {
+    const containerId = `${instance}-${deckName}-stats`;
+    let statsContainer = document.getElementById(containerId);
+
+    if (!statsContainer) {
+        // Create stats container if it doesn't exist
+        const deckDiv = document.querySelector(`#${instance}-decks .deck-container:nth-child(${Object.keys(initialDecks).indexOf(deckName) + 1})`);
+        statsContainer = document.createElement("div");
+        statsContainer.id = containerId;
+        statsContainer.className = "advanced-stats";
+        deckDiv.appendChild(statsContainer);
+    }
+
+    // Update stats content
+    statsContainer.innerHTML = `
+        <strong>Advanced Stats:</strong><br>
+        ${[1, 2, 3, 4, 5]
+            .map(
+                numCards =>
+                    `${numCards} cards: Avg = ${stats[numCards].average}, Hit% = ${stats[numCards].hitChance}`
+            )
+            .join("<br>")}
+    `;
 }
 
 // Reset the specified deck to its initial state
