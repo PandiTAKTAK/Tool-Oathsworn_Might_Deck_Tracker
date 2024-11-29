@@ -141,12 +141,13 @@ function adjustLayout() {
     const maxDeckWidth = Math.floor(containerWidth / 4) - 20;
     const maxButtons = Math.max(...Object.keys(initialDecks).map(deck => initialDecks[deck].length));
     const buttonSize = Math.min(Math.floor((maxDeckWidth - 50) / maxButtons), 80);
+    const minButtonSize = 30;
 
     document.querySelectorAll('.deck-container').forEach(deck => deck.style.width = `${maxDeckWidth}px`);
     document.querySelectorAll('.button-container button').forEach(button => {
-        button.style.width = `${buttonSize}px`;
-        button.style.height = `${buttonSize}px`;
-        button.style.fontSize = `${buttonSize / 3}px`;
+        button.style.width = `${Math.max(buttonSize, minButtonSize)}px`;
+        button.style.height = `${Math.max(buttonSize, minButtonSize)}px`;
+        button.style.fontSize = `${Math.max(buttonSize / 3, 12)}px`;
     });
 }
 

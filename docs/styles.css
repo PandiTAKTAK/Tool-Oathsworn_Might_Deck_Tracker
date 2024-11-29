@@ -43,6 +43,8 @@ h2 {
     flex-direction: column;
     align-items: center;
     width: 100%;
+    min-width: 230px;
+    min-height: 180px;
     box-sizing: border-box;
 }
 
@@ -128,11 +130,7 @@ button.black {
     gap: 20px;
 }
 
-@media (max-width: 768px) {
-    #Oathsworn-decks, #Encounter-decks {
-        flex-direction: column;
-    }
-}
+
 
 .reset-button {
     background-image: url('button_large.png');
