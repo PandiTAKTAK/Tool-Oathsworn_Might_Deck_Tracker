@@ -94,26 +94,6 @@ h2 {
     background-color: rgba(200, 200, 200, 0.7);
 }
 
-.composition-display {
-    font-size: 14px;
-    margin-top: 5px;
-    text-align: center;
-    color: #555;
-}
-
-#Oathsworn-decks, #Encounter-decks {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-}
-
-@media (max-width: 768px) {
-    #Oathsworn-decks, #Encounter-decks {
-        flex-direction: column;
-    }
-}
-
 button.white {
     background-color: white;
     color: black;
@@ -132,6 +112,26 @@ button.red {
 button.black {
     background-color: black;
     color: white;
+}
+
+.composition-display {
+    font-size: 14px;
+    margin-top: 5px;
+    text-align: center;
+    color: #555;
+}
+
+#Oathsworn-decks, #Encounter-decks {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+@media (max-width: 768px) {
+    #Oathsworn-decks, #Encounter-decks {
+        flex-direction: column;
+    }
 }
 
 .reset-button {
