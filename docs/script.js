@@ -1,3 +1,21 @@
+
+function showToast(message) {
+    const toastContainer = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    
+    // Add toast to the container
+    toastContainer.appendChild(toast);
+    
+    // Remove toast after animation
+    setTimeout(() => {
+        toastContainer.removeChild(toast);
+    }, 3000);
+}
+
+// ######################################################
+
 // Initial card values, replicating die faces
 const initialDecks = {
     "White": [0, 0, 1, 1, 2, "{2}"],
@@ -17,18 +35,26 @@ function getDeck(deckName) {
     return initialDecks[deckName].flatMap(card => [card, card, card]);
 }
 
-// Init decks
+// Init decks with Draw and Discard attrs
 function initAllDecks() {
     Object.keys(initialDecks).forEach(deckName => {
-        allDecks.Oathsworn[deckName] = getDeck(deckName);
-        allDecks.Encounter[deckName] = getDeck(deckName);
+        allDecks.Oathsworn[deckName] = {
+            Draw: getDeck(deckName),
+            Discard: []
+        };
+        allDecks.Encounter[deckName] = {
+            Draw: getDeck(deckName),
+            Discard: []
+        };
     });
 }
 
 // Reset specific deck to initial state
 function resetDeck(instance, deckName) {
-    allDecks[instance][deckName] = getDeck(deckName);
-    updateStats(instance, deckName); // Update statistics for the deck
+    allDecks[instance][deckName].Draw = getDeck(deckName);
+    allDecks[instance][deckName].Discard = [];
+    updateStats(instance, deckName);
+    showToast(`Reset ${deckName.toLowerCase()} ${instance.toLowerCase()} deck`);
 }
 
 // ######################################################
@@ -87,12 +113,18 @@ function createDeckUI(deckName, instance) {
 
     deckDiv.appendChild(buttonContainer);
 
-    // Reset button for the deck
+    // Button container for Reset
+    const actionButtonContainer = document.createElement("div");
+    actionButtonContainer.className = "action-button-container";
+
+    // Reset button
     const resetButton = document.createElement("button");
     resetButton.textContent = "Reset";
     resetButton.classList.add("reset-button");
     resetButton.onclick = () => resetDeck(instance, deckName);
-    deckDiv.appendChild(resetButton);
+    actionButtonContainer.appendChild(resetButton);
+
+    deckDiv.appendChild(actionButtonContainer);
 
     return deckDiv;
 }
@@ -104,30 +136,32 @@ function getCardCount(instance, deckName, card) {
     return allDecks[instance][deckName].filter(c => c === card).length;
 }
 
-// Draw a card and remove it from the deck
+// Draw a card and add to discard
 function drawCard(instance, deckName, card) {
-    // Find the index of the specified card in the deck
-    const cardIndex = allDecks[instance][deckName].indexOf(card);
-    
-    // If the card exists in the deck (index >= 0), remove it
+    const deck = allDecks[instance][deckName];
+    const cardIndex = deck.Draw.indexOf(card);
     if (cardIndex >= 0) {
-        allDecks[instance][deckName].splice(cardIndex, 1);  // Remove the card from the deck
-        updateStats(instance, deckName);  // Update the deck statistics after drawing the card
+        // Remove card from the Draw pile
+        deck.Draw.splice(cardIndex, 1);
+        // Add card to the Discard pile
+        deck.Discard.push(card);
+        updateStats(instance, deckName);
+        showToast(`Drew "${card}" from ${deckName.toLowerCase()} ${instance.toLowerCase()} deck`);
     }
 }
 
 // Update statistics for the deck
 function updateStats(instance, deckName) {
-    const totalCards = allDecks[instance][deckName].length;
+    const deck = allDecks[instance][deckName];
+    const totalCards = deck.Draw.length;
     const totalCardsDisplay = document.getElementById(`${instance}-${deckName}-total-corner`);
     if (totalCardsDisplay) totalCardsDisplay.textContent = totalCards;
 
     const uniqueCards = [...new Set(initialDecks[deckName])];
-
     uniqueCards.forEach(card => {
         const compositionDisplay = document.getElementById(`${instance}-${deckName}-${card}-composition`);
         if (compositionDisplay) {
-            const count = getCardCount(instance, deckName, card);
+            const count = deck.Draw.filter(c => c === card).length;
             const percentage = totalCards ? ((count / totalCards) * 100).toFixed(1) : 0;
             compositionDisplay.innerHTML = `${count}<br>${percentage}%`;
         }
