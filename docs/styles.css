@@ -48,10 +48,32 @@ h2 {
     box-sizing: border-box;
 }
 
+.top-corner-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+}
+
 .total-cards-corner {
     position: absolute;
     top: 10px;
     right: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.health-box {
+    position: absolute;
+    top: 10px;
+    left: 10px;
     font-size: 14px;
     font-weight: bold;
     background-color: rgba(0, 0, 0, 0.6);

@@ -78,11 +78,23 @@ function createDeckUI(deckName, instance) {
     header.textContent = deckName;
     deckDiv.appendChild(header);
 
+    // Total cards and health
+    const topCornerContainer = document.createElement("div");
+    topCornerContainer.className = "top-corner-container";
+
     // Corner display for total card count
     const totalCardsDisplay = document.createElement("div");
     totalCardsDisplay.className = "total-cards-corner";
     totalCardsDisplay.id = `${instance}-${deckName}-total-corner`;
-    deckDiv.appendChild(totalCardsDisplay);
+    topCornerContainer.appendChild(totalCardsDisplay);
+
+    // Health display box (positioned in the top-left)
+    const healthBox = document.createElement("div");
+    healthBox.className = "health-box";
+    healthBox.id = `${instance}-${deckName}-health-box`;
+    topCornerContainer.appendChild(healthBox);
+
+    deckDiv.appendChild(topCornerContainer);
 
     // Button container and card wrappers
     const buttonContainer = document.createElement("div");
@@ -155,6 +167,7 @@ function updateStats(instance, deckName) {
     const deck = allDecks[instance][deckName];
     const totalCards = deck.Draw.length;
     const totalCardsDisplay = document.getElementById(`${instance}-${deckName}-total-corner`);
+    const healthBox = document.getElementById(`${instance}-${deckName}-health-box`);
     if (totalCardsDisplay) totalCardsDisplay.textContent = totalCards;
 
     const uniqueCards = [...new Set(initialDecks[deckName])];
@@ -166,6 +179,37 @@ function updateStats(instance, deckName) {
             compositionDisplay.innerHTML = `${count}<br>${percentage}%`;
         }
     });
+
+    // Calculate health
+    const misses = deck.Draw.filter(card => card === 0).length;
+    const missPercentage = totalCards ? (misses / totalCards) * 100 : 0;
+
+    // Colour for misses
+    let red = 0;
+    let green = 0;
+    let textHealth = `Miss`;
+
+    if (missPercentage.toFixed(1) > 33.3) {
+        red = 255;
+        green = 0;
+    } else if (missPercentage.toFixed(1) < 33.3) {
+        red = 0;
+        green = 255;
+    } else {
+        red = 0;
+        green = 0;
+    }
+
+    if (`${instance}` === "Encounter") {
+        // More misses are good... For us.
+        [red, green] = [green, red];
+        textHealth = "0's"
+    }
+
+    // Set health box colour
+    const healthColour = `rgb(${red}, ${green}, 0, 0.6)`;
+    healthBox.style.backgroundColor = healthColour;
+    healthBox.textContent = textHealth;
 }
 
 // Adjust the layout for buttons on window resize
