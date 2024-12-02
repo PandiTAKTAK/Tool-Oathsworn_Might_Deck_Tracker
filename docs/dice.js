@@ -32,10 +32,22 @@ function calculateMissProbability(dice, rerolls) {
     // 1/3 of the time we'd have a blank
     
     // TODO: Do a re-roll
-    if (rerolls > 0) {// Escape the 0 case.....
+    if (rerolls > 0) { // Escape the 0 case.....
 
+        // For each reroll, calculate the probability of missing again
+        let rerollMissProb = baseMissProbability(1); // Miss probability for 1 die
+        let totalMissProb = missProb; // Start with base probability of missing
+        // TODO: Handle the case where a single die could be re-roled multiple times
+        
+        for (let i = 0; i < rerolls; i++) {
+            // Calculate the new miss probability after the reroll
+            // Should get smaller each time, so multiply the current miss probability by the chance that the die misses
+            // TODO: Check nuance
+            totalMissProb *= rerollMissProb;
+        }
+        
+        missProb = totalMissProb;
     }
-
     return (missProb * 100).toFixed(2);
 }
 
