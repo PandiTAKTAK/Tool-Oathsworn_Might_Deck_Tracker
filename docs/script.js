@@ -1,4 +1,3 @@
-
 function showToast(message) {
     const toastContainer = document.getElementById('toast-container');
     const toast = document.createElement('div');
@@ -73,10 +72,12 @@ function createDeckUI(deckName, instance) {
     deckDiv.className = "deck-container";
 
     // Header for the deck
+    /*
     const header = document.createElement("div");
     header.className = "deck-header";
     header.textContent = deckName;
     deckDiv.appendChild(header);
+    */
 
     // Total cards and health
     const topCornerContainer = document.createElement("div");
@@ -99,6 +100,13 @@ function createDeckUI(deckName, instance) {
     criticalsDisplay.className = "criticals-box";
     criticalsDisplay.id = `${instance}-${deckName}-criticals-box`;
     topCornerContainer.appendChild(criticalsDisplay);
+
+    // Average Hit Value
+    const avgBox = document.createElement("div");
+    avgBox.className = "avg-box";
+    avgBox.id = `${instance}-${deckName}-avg-box`;
+    avgBox.textContent = "Avg: 0.00";  // Initial text
+    topCornerContainer.appendChild(avgBox);
 
     deckDiv.appendChild(topCornerContainer);
 
@@ -175,6 +183,7 @@ function updateStats(instance, deckName) {
     const totalCardsDisplay = document.getElementById(`${instance}-${deckName}-total-corner`);
     const missBox = document.getElementById(`${instance}-${deckName}-miss-box`);
     const criticalsBox = document.getElementById(`${instance}-${deckName}-criticals-box`);
+    const avgBox = document.getElementById(`${instance}-${deckName}-avg-box`);
 
     // ## Total card count ##
     if (totalCardsDisplay) totalCardsDisplay.textContent = totalCards;
@@ -248,6 +257,10 @@ function updateStats(instance, deckName) {
     const critColour = `rgb(${red}, ${green}, 0, 0.6)`;
     criticalsBox.style.backgroundColor = critColour;
     criticalsBox.textContent = `{*}`;
+
+    // ## Average Hit Value ##
+    const avgHitValue = calculateAverageHitValue(instance, deck.Draw);
+    if (avgBox) avgBox.textContent = avgHitValue.toFixed(2);  // Display average hit value
 }
 
 // Adjust the layout for buttons on window resize
@@ -266,6 +279,43 @@ function adjustLayout() {
         button.style.fontSize = `${Math.max(buttonSize / 3, 12)}px`;
     });
 }
+
+// ######################################################
+
+// Calculate avg from given deck
+function calculateAverageHitValue(instance, faces) {
+    const parsedFaces = faces.map(face => {
+        if (typeof face === 'string') {
+            return parseInt(face.replace(/[{}]/g, '')); // Handle exploding face like "{2}" -> 2
+        }
+        return face;
+    });
+
+    const rerollFace = parsedFaces[parsedFaces.length - 1];
+    const probability = 1 / parsedFaces.length;
+    
+    // Calculate the expected value recursively (without infinite recursion)
+    // Calc the expected value of a single die roll first.
+    let expectedValue = 0;
+    
+    // Calculate the sum of non-exploding faces
+    parsedFaces.forEach(face => {
+        if (face === rerollFace && instance !== 'Encounter') {
+            // For the reroll face, we need to add the value plus the expected value again
+            expectedValue += probability * (face + expectedValue); 
+        } else {
+            expectedValue += probability * face; // For regular faces, just add their value
+        }
+    });
+
+    return expectedValue;
+}
+
+// Display the average dice values
+Object.keys(initialDecks).forEach(deckName => {
+    const averageValue = calculateAverageHitValue("None", initialDecks[deckName]).toFixed(2);
+    document.getElementById(`${deckName.toLowerCase()}DieValueOath`).innerText = averageValue;
+});
 
 // Run layout adjustment on window resize
 window.addEventListener('resize', adjustLayout);
