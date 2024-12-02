@@ -214,3 +214,23 @@ button.black {
         transform: translateY(20px);
     }
 }
+
+#misstable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#missTable th, #missTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+#missTable th {
+    background-color: #f2f2f2;
+}
+
+#missTable td {
+    background-color: rgba(255, 255, 255, 0.2);
+}
