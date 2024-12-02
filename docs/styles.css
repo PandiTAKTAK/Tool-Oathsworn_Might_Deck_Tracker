@@ -232,5 +232,29 @@ button.black {
 }
 
 #missTable td {
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+td.title {
+    position: relative;
+    padding: 0;
+    background-image: linear-gradient(to bottom left, #ddd 50%, #ddd 50%, #ddd 51%);
+}
+  
+th.title {
+    position: relative;
+    padding: 0;
+    background-image: linear-gradient(to bottom left, #f2f2f2 49%, black 50%, #ddd 50%);
+}
+  
+th.title .c1 {
+    left: 0;
+    text-align: right;
+    padding-left: 10px;
+}
+  
+th.title .c2 {
+    right: 0;
+    text-align: left;
+    padding-right: 10px;
 }

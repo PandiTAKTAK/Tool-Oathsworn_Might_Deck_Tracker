@@ -32,6 +32,9 @@ function calculateMissProbability(dice, rerolls) {
     // 1/3 of the time we'd have a blank
     
     // TODO: Do a re-roll
+    if (rerolls > 0) {// Escape the 0 case.....
+
+    }
 
     return (missProb * 100).toFixed(2);
 }
@@ -44,7 +47,7 @@ function generateMissTable() {
     const rerolls = 6; // i.e. 0 .. 5
     const qtyDice = 10;
 
-    let tableHTML = '<tr><th># Dice / # Re-roll</th>';
+    let tableHTML = '<tr><th class="title"><div class="c1">#ReRoll</div><div class ="c2">#Dice</div></th>';
 
     // Column header
     for (let reroll = 0; reroll < rerolls; reroll++) {
@@ -54,7 +57,7 @@ function generateMissTable() {
 
     // Rows
     for (let dice = 1; dice <= qtyDice; dice++) {
-        tableHTML += `<tr><td>${dice}</td>`;
+        tableHTML += `<tr><td class="title">${dice}</td>`;
 
         // Fill table
         for (let reroll = 0; reroll < rerolls; reroll++) {
