@@ -88,11 +88,17 @@ function createDeckUI(deckName, instance) {
     totalCardsDisplay.id = `${instance}-${deckName}-total-corner`;
     topCornerContainer.appendChild(totalCardsDisplay);
 
-    // Health display box (positioned in the top-left)
-    const healthBox = document.createElement("div");
-    healthBox.className = "health-box";
-    healthBox.id = `${instance}-${deckName}-health-box`;
-    topCornerContainer.appendChild(healthBox);
+    // Miss health
+    const missBox = document.createElement("div");
+    missBox.className = "miss-box";
+    missBox.id = `${instance}-${deckName}-miss-box`;
+    topCornerContainer.appendChild(missBox);
+
+    // Crit health
+    const criticalsDisplay = document.createElement("div");
+    criticalsDisplay.className = "criticals-box";
+    criticalsDisplay.id = `${instance}-${deckName}-criticals-box`;
+    topCornerContainer.appendChild(criticalsDisplay);
 
     deckDiv.appendChild(topCornerContainer);
 
@@ -167,9 +173,13 @@ function updateStats(instance, deckName) {
     const deck = allDecks[instance][deckName];
     const totalCards = deck.Draw.length;
     const totalCardsDisplay = document.getElementById(`${instance}-${deckName}-total-corner`);
-    const healthBox = document.getElementById(`${instance}-${deckName}-health-box`);
+    const missBox = document.getElementById(`${instance}-${deckName}-miss-box`);
+    const criticalsBox = document.getElementById(`${instance}-${deckName}-criticals-box`);
+
+    // ## Total card count ##
     if (totalCardsDisplay) totalCardsDisplay.textContent = totalCards;
 
+    // ## Individual cards ##
     const uniqueCards = [...new Set(initialDecks[deckName])];
     uniqueCards.forEach(card => {
         const compositionDisplay = document.getElementById(`${instance}-${deckName}-${card}-composition`);
@@ -180,14 +190,15 @@ function updateStats(instance, deckName) {
         }
     });
 
-    // Calculate health
+    // ## Misses ##
+    // Calculate miss health
     const misses = deck.Draw.filter(card => card === 0).length;
     const missPercentage = totalCards ? (misses / totalCards) * 100 : 0;
 
     // Colour for misses
     let red = 0;
     let green = 0;
-    let textHealth = `Miss`;
+    let textmiss = `Miss`;
 
     if (missPercentage.toFixed(1) > 33.3) {
         red = 255;
@@ -203,13 +214,40 @@ function updateStats(instance, deckName) {
     if (`${instance}` === "Encounter") {
         // More misses are good... For us.
         [red, green] = [green, red];
-        textHealth = "0's"
+        textmiss = "0's"
     }
 
-    // Set health box colour
-    const healthColour = `rgb(${red}, ${green}, 0, 0.6)`;
-    healthBox.style.backgroundColor = healthColour;
-    healthBox.textContent = textHealth;
+    // Set miss box colour
+    const missColour = `rgb(${red}, ${green}, 0, 0.6)`;
+    missBox.style.backgroundColor = missColour;
+    missBox.textContent = textmiss;
+
+    // ## Crits ##
+    const criticalCards = deck.Draw.filter(card => /\{\d\}/.test(card));  // Regex to detect cards like {2}, {3}, etc.
+    const critCount = criticalCards.length;  // Get the number of critical cards
+    const critPercentage = totalCards ? (critCount / totalCards) * 100 : 0;
+
+    if (critPercentage.toFixed(1) > 16.7) {
+        red = 0;
+        green = 255;
+    } else if (critPercentage.toFixed(1) < 16.7) {
+        red = 255;
+        green = 0;
+    } else {
+        red = 0;
+        green = 0;
+    }
+
+    // Repeat rather than refactor as clearer...
+    if (`${instance}` === "Encounter") {
+        // Fewer hits are good... For us.
+        [red, green] = [green, red];
+    }
+
+    // Set crit box colour
+    const critColour = `rgb(${red}, ${green}, 0, 0.6)`;
+    criticalsBox.style.backgroundColor = critColour;
+    criticalsBox.textContent = `{*}`;
 }
 
 // Adjust the layout for buttons on window resize
