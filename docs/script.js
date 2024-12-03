@@ -1,16 +1,71 @@
+const toastHistory = [];
+const maxToastHistory = 10;
+let historyModal;
+
 function showToast(message) {
     const toastContainer = document.getElementById('toast-container');
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.textContent = message;
-    
-    // Add toast to the container
+
+    // Push
     toastContainer.appendChild(toast);
-    
+
+    // Pop
+    toastHistory.unshift(message);
+    if (toastHistory.length > maxToastHistory) toastHistory.pop();
+
     // Remove toast after animation
     setTimeout(() => {
         toastContainer.removeChild(toast);
-    }, 3000);
+    }, 1500); // Matches to animation in CSS, there's almost certainly a better way to do this
+
+    updateToastHistory();
+
+}
+
+function initToastHistory() {
+    // Create the reusable modal
+    historyModal = document.createElement('div');
+    historyModal.className = 'toast-modal hidden'; // Initially hidden
+
+    // Append modal to the body
+    document.body.appendChild(historyModal);
+
+    // Button
+    const historyButton = document.createElement('button');
+    historyButton.className = 'toast-button';
+    historyButton.textContent = 'History';
+    historyButton.onclick = toggleToastHistory;
+    document.body.appendChild(historyButton);
+}
+
+function toggleToastHistory() {
+    if (!historyModal) return;
+
+    if (historyModal.classList.contains('hidden')) {
+        // Populate the modal and show it
+        updateToastHistory();
+        historyModal.classList.remove('hidden');
+    } else {
+        // Hide the modal
+        historyModal.classList.add('hidden');
+    }
+}
+
+function updateToastHistory() {
+
+    const toastItems = historyModal.querySelectorAll('.toast-item');
+    toastItems.forEach(item => historyModal.removeChild(item));
+
+    // Toast go brrr
+    toastHistory.forEach((message, index) => {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'toast-item';
+        messageDiv.textContent = `${message}`;
+        historyModal.appendChild(messageDiv);
+    });
+
 }
 
 // ######################################################
@@ -327,4 +382,5 @@ window.onload = () => {
         Object.keys(initialDecks).forEach(deckName => initDeckUI(deckName, instance));
     });
     adjustLayout();
+    initToastHistory();
 };
