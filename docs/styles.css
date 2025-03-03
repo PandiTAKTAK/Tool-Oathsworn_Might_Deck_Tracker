@@ -1,0 +1,310 @@
+.header-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-container img {
+    width: 100px;
+    height: 100px;
+}
+
+.header-container span {
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    background-image: 
+        linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+        url('Chapter_10.webp');
+    background-size: cover;
+}
+
+h2 {
+    color: white;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.deck-container {
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    padding: 15px;
+    padding-top: 40px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-width: 230px;
+    min-height: 180px;
+    box-sizing: border-box;
+}
+
+.top-corner-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: flex-start;
+    padding: 5px;
+    gap: 5px;
+}
+
+.total-cards-corner {
+    position: absolute;
+    right: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.avg-box {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    background-color: #ffffff;
+    border: 2px solid #333;
+    border-radius: 5px;
+    padding: 1px;
+}
+
+.miss-box, .criticals-box {
+    font-size: 14px;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.deck-header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.button-container {
+    display: grid;
+    grid-template-rows: repeat(1, auto);
+    grid-auto-flow: column;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+}
+
+.button-container button {
+    background-color: #ffffff;
+    border: 2px solid #333;
+    border-radius: 8px;
+    width: 60px;
+    height: 60px;
+    font-size: 20px;
+    margin: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.1s;
+}
+
+.button-container button:hover {
+    transform: scale(1.1);
+    background-color: rgba(200, 200, 200, 0.7);
+}
+
+button.white {
+    background-color: white;
+    color: black;
+}
+
+button.yellow {
+    background-color: yellow;
+    color: black;
+}
+
+button.red {
+    background-color: red;
+    color: white;
+}
+
+button.black {
+    background-color: black;
+    color: white;
+}
+
+.composition-display {
+    font-size: 14px;
+    margin-top: 5px;
+    text-align: center;
+    color: #555;
+}
+
+#Oathsworn-decks, #Encounter-decks {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.action-button-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.reset-button {
+    background-image: url('button_large.png');
+    background-size: 100% 100%;
+    background-position: center;
+    color: white;
+    font-weight: bold;
+    border: none;
+    width: 80px;
+    height: 30px;
+    font-size: 12px;
+    margin-top: 5px;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.reset-button:hover {
+    transform: scale(0.9);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+#toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    margin-bottom: 30px;
+}
+
+.toast {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
+    animation: fadeInOut 1.5s ease-in-out forwards;
+}
+
+.toast-modal {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 120px 50px rgba(0, 0, 0, 0.6);
+    padding: 20px;
+    margin-bottom: 40px;
+}
+
+.toast-modal.hidden {
+    display: none;
+}
+
+.toast-item {
+    margin: 5px 0;
+    padding: 5px 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.toast-button {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    padding: 10px 15px;
+    background-color: #ffb300;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.toast-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    10% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    90% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
+
+#misstable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#missTable th, #missTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+#missTable th {
+    background-color: #f2f2f2;
+}
+
+#missTable td {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+td.title {
+    position: relative;
+    padding: 0;
+    background-image: linear-gradient(to bottom left, #ddd 50%, #ddd 50%, #ddd 51%);
+}
+  
+th.title {
+    position: relative;
+    padding: 0;
+    background-image: linear-gradient(to bottom left, #f2f2f2 49%, black 50%, #ddd 50%);
+}
+  
+th.title .c1 {
+    left: 0;
+    text-align: right;
+    padding-left: 10px;
+}
+  
+th.title .c2 {
+    right: 0;
+    text-align: left;
+    padding-right: 10px;
+}
